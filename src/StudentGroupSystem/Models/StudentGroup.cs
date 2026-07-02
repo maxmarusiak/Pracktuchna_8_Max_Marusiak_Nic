@@ -139,5 +139,80 @@ namespace StudentGroupSystem.Models
                 }
             }
         }
+
+
+        public void Save(string filePath, StorageFormat format)
+        {
+            var fileManager = new FileManager();
+
+            switch (format)
+            {
+                case StorageFormat.Json:
+                    fileManager.SaveToJson(this, filePath);
+                    break;
+
+                case StorageFormat.Txt:
+                    string text = ToTextFormat();
+                    fileManager.SaveToText(text, filePath);
+                    break;
+            }
+        }
+
+        public static StudentGroup Load(string filePath, StorageFormat format)
+        {
+            var fileManager = new FileManager();
+
+            return format switch
+            {
+                StorageFormat.Json => fileManager.LoadFromJson<StudentGroup>(filePath),
+                StorageFormat.Txt => FromTextFormat(fileManager.ReadFromText(filePath)),
+                _ => throw new InvalidOperationException("Unsupported format")
+            };
+        }
+
+        private string ToTextFormat()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Group: {GroupName}");
+            sb.AppendLine("Students:");
+
+            foreach (var student in Students)
+            {
+                sb.AppendLine($"{student.FirstName} {student.LastName} — {student.AverageGrade}");
+            }
+
+            return sb.ToString();
+        }
+
+        private static StudentGroup FromTextFormat(string content)
+        {
+            var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+            var group = new StudentGroup
+            {
+                GroupName = lines[0].Replace("Group: ", "").Trim()
+            };
+
+            for (int i = 2; i < lines.Length; i++)
+            {
+                var parts = lines[i].Split('—');
+                if (parts.Length == 2)
+                {
+                    var nameParts = parts[0].Trim().Split(' ');
+                    var student = new Student
+                    {
+                        FirstName = nameParts[0],
+                        LastName = nameParts[1],
+                        AverageGrade = double.Parse(parts[1].Trim())
+                    };
+
+                    group.Students.Add(student);
+                }
+            }
+
+            return group;
+        }
+
+        
     }
 }
