@@ -10,6 +10,9 @@ namespace StudentGroupSystem.Menu
     {
         private StudentGroup _group;
         private Student _currentStudent;
+        private Logger _logger = new Logger();
+        private LogRotationService _logRotation = new LogRotationService();
+
 
         public MainMenu()
         {
@@ -42,87 +45,167 @@ namespace StudentGroupSystem.Menu
 
                 string input = Console.ReadLine();
 
+                _logger.Log($"User selected option: {input}");
+
                 switch (input)
                 {
-                    case "1": AddBachelor(); break;
-                    case "2": AddMaster(); break;
-                    case "3": AddPhD(); break;
-                    case "4": _group.PrintAll(); Console.ReadKey(); break;
+                    case "1":
+                        _logger.Log("Executing AddBachelor()");
+                        AddBachelor();
+                        break;
 
-                    case "5": SelectStudent(); break;
-                    case "6": Console.WriteLine($"Average grade: {_group.GetAverageGrade()}"); Console.ReadKey(); break;
+                    case "2":
+                        _logger.Log("Executing AddMaster()");
+                        AddMaster();
+                        break;
 
-                    case "31": AddNewShape(); break;
-                    case "32": ShowAllShapes(); break;
-                    case "33": CalculateTotalArea(); break;
-                    case "34": ResizeAllShapes(); break;
-                    case "35": DrawAllShapes(); break;
-                    case "36": PrintAllShapes(); break;
-                    case "37": DemonstrateDynamicBinding(); break;
-                    case 38:
+                    case "3":
+                        _logger.Log("Executing AddPhD()");
+                        AddPhD();
+                        break;
+
+                    case "4":
+                        _logger.Log("Executing PrintAll()");
+                        _group.PrintAll();
+                        Console.ReadKey();
+                        break;
+
+                    case "5":
+                        _logger.Log("Executing SelectStudent()");
+                        SelectStudent();
+                        break;
+
+                    case "6":
+                        _logger.Log("Executing GetAverageGrade()");
+                        Console.WriteLine($"Average grade: {_group.GetAverageGrade()}");
+                        Console.ReadKey();
+                        break;
+
+                    case "31":
+                        _logger.Log("Executing AddNewShape()");
+                        AddNewShape();
+                        break;
+
+                    case "32":
+                        _logger.Log("Executing ShowAllShapes()");
+                        ShowAllShapes();
+                        break;
+
+                    case "33":
+                        _logger.Log("Executing CalculateTotalArea()");
+                        CalculateTotalArea();
+                        break;
+
+                    case "34":
+                        _logger.Log("Executing ResizeAllShapes()");
+                        ResizeAllShapes();
+                        break;
+
+                    case "35":
+                        _logger.Log("Executing DrawAllShapes()");
+                        DrawAllShapes();
+                        break;
+
+                    case "36":
+                        _logger.Log("Executing PrintAllShapes()");
+                        PrintAllShapes();
+                        break;
+
+                    case "37":
+                        _logger.Log("Executing DemonstrateDynamicBinding()");
+                        DemonstrateDynamicBinding();
+                        break;
+
+                    case "38":
+                        _logger.Log("Executing DemoPointAndGrade()");
                         DemoPointAndGrade();
                         break;
-                    case 39:
+
+                    case "39":
+                        _logger.Log("Executing PerformanceTest.Run()");
                         new PerformanceTest().Run();
                         break;
-                    case 40:
+
+                    case "40":
+                        _logger.Log("Executing ConvertStudentToRecord()");
                         ConvertStudentToRecord();
                         break;
-                    case 41:
+
+                    case "41":
+                        _logger.Log("Executing ShowGradeHistory()");
                         ShowGradeHistory();
                         break;
-                    case 42:
+
+                    case "42":
+                        _logger.Log("Executing TestEqualsStructs()");
                         TestEqualsStructs();
                         break;
-                    case 43:
+
+                    case "43":
+                        _logger.Log("Executing OptimizeStorage()");
                         group.OptimizeStorage();
                         break;
 
-                    case 44:
+                    case "44":
+                        _logger.Log("Executing SaveJson()");
                         SaveJson();
                         break;
 
-                    case 45:
+                    case "45":
+                        _logger.Log("Executing LoadJson()");
                         LoadJson();
                         break;
 
-                    case 46:
+                    case "46":
+                        _logger.Log("Executing ExportCsv()");
                         ExportCsv();
                         break;
 
-                    case 47:
+                    case "47":
+                        _logger.Log("Executing SaveReportTxt()");
                         SaveReportTxt();
                         break;
 
-                    case 48:
+                    case "48":
+                        _logger.Log("Executing CreateBackup()");
                         CreateBackup();
                         break;
 
-                    case 49:
+                    case "49":
+                        _logger.Log("Executing ViewBackups()");
                         ViewBackups();
                         break;
 
-                    case 50:
+                    case "50":
+                        _logger.Log("Executing ImportStudentsTxt()");
                         ImportStudentsTxt();
                         break;
 
-                    case 51:
+                    case "51":
+                        _logger.Log("Executing CleanOldBackups()");
                         CleanOldBackups();
                         break;
 
-                    case 52:
+                    case "52":
+                        _logger.Log("Executing TestExceptionHandling()");
                         _group.TestExceptionHandling();
                         break;
 
-                    case "0": return;
+                    case "0":
+                        _logger.Log("Exiting program");
+                        return;
 
                     default:
+                        _logger.Log("Invalid option selected");
                         Console.WriteLine("Invalid option");
                         Console.ReadKey();
                         break;
                 }
+
+                _logRotation.RotateIfNeeded();
             }
         }
+
 
         // ---------------- STUDENTS ----------------
 
