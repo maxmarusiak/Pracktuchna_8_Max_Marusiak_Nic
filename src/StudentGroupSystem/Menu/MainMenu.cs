@@ -77,6 +77,43 @@ namespace StudentGroupSystem.Menu
                     case 43:
                         group.OptimizeStorage();
                         break;
+
+                    case 44:
+                        SaveJson();
+                        break;
+
+                    case 45:
+                        LoadJson();
+                        break;
+
+                    case 46:
+                        ExportCsv();
+                        break;
+
+                    case 47:
+                        SaveReportTxt();
+                        break;
+
+                    case 48:
+                        CreateBackup();
+                        break;
+
+                    case 49:
+                        ViewBackups();
+                        break;
+
+                    case 50:
+                        ImportStudentsTxt();
+                        break;
+
+                    case 51:
+                        CleanOldBackups();
+                        break;
+
+                    case 52:
+                        _group.TestExceptionHandling();
+                        break;
+
                     case "0": return;
 
                     default:
@@ -284,6 +321,72 @@ namespace StudentGroupSystem.Menu
             }
 
             Console.ReadKey();
+        }
+
+                private void SaveJson()
+        {
+            Console.Write("Enter file path: ");
+            string path = Console.ReadLine();
+            _group.Save(path, StorageFormat.Json);
+            Console.WriteLine("Saved to JSON.");
+        }
+
+        private void LoadJson()
+        {
+            Console.Write("Enter file path: ");
+            string path = Console.ReadLine();
+            _group = StudentGroup.Load(path, StorageFormat.Json);
+            Console.WriteLine("Loaded from JSON.");
+        }
+
+        private void ExportCsv()
+        {
+            Console.Write("Enter CSV file path: ");
+            string path = Console.ReadLine();
+            _group.ExportGradesToCsv(path);
+            Console.WriteLine("CSV exported.");
+        }
+
+        private void SaveReportTxt()
+        {
+            Console.Write("Enter TXT file path: ");
+            string path = Console.ReadLine();
+            _fileManager.SaveToText(_group.ToString(), path);
+            Console.WriteLine("Report saved.");
+        }
+
+        private void CreateBackup()
+        {
+            Console.Write("Enter source file path: ");
+            string path = Console.ReadLine();
+            _fileManager.CreateBackup(path);
+            Console.WriteLine("Backup created.");
+        }
+
+        private void ViewBackups()
+        {
+            Console.WriteLine("Backup files:");
+            foreach (var file in Directory.GetFiles("Backups"))
+            {
+                Console.WriteLine(file);
+            }
+        }
+
+        private void ImportStudentsTxt()
+        {
+            Console.Write("Enter TXT file path: ");
+            string path = Console.ReadLine();
+            string content = _fileManager.ReadFromText(path);
+            Console.WriteLine("TXT content loaded (you can parse it later):");
+            Console.WriteLine(content);
+        }
+
+        private void CleanOldBackups()
+        {
+            Console.Write("Enter days old: ");
+            int days = int.Parse(Console.ReadLine());
+            _fileManager.CleanOldBackups(days);
+            Console.WriteLine("Old backups cleaned.");
         }
     }
 }
