@@ -213,6 +213,32 @@ namespace StudentGroupSystem.Models
             return group;
         }
 
-        
+        using StudentGroupSystem.Services;
+
+        public void ExportGradesToCsv(string filePath)
+        {
+            var exporter = new CsvExporter();
+            exporter.ExportToCsv(this, filePath);
+        }
+
+        public void TestExceptionHandling()
+        {
+            try
+            {
+                // Спроба завантажити неіснуючий файл
+                var fm = new FileManager();
+                fm.LoadFromJson<StudentGroup>("non_existing.json");
+            }
+            catch (InvalidFileFormatException ex)
+            {
+                Console.WriteLine($"Custom exception caught: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General exception: {ex.Message}");
+            }
+        }
+
+
     }
 }
